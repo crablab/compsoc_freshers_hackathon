@@ -3,8 +3,8 @@
 
 <p>Welcome blah blah etc.</p>
 
-<form action="/api/stage0" method=post>
-    <input type="email" name="email" placeholder="email" id="name">
+<form action="/api/stage0" method="post">
     <label for="email">Email address:</label>
+    <input type="email" name="email" placeholder="email" id="name">
     <input type="submit" value="Go!">
 </form>
