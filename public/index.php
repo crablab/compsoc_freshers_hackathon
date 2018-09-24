@@ -119,6 +119,9 @@ function loadCMS($sitePageURLArray, $site){
     } else {
         require("../server/includes/stage0.php");      
     }
+
+    //load footer
+    require("../server/includes/footer.php");
 }
 
 
