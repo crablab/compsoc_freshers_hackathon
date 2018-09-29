@@ -10,7 +10,7 @@ if(!$_GET['id']){
 //lookup the hash
 $id = $db->hashLookup($_GET['id']);
 //check we haven't done this stage already
-$stcheck = $db->stageCompleted($id, "stage1");
+$stcheck = $db->stageCompleted($id, "stage7");
 
 if(!$id || $stcheck){
     http401();
@@ -19,18 +19,18 @@ if(!$id || $stcheck){
 //check we haven't started the stage before 
 $st_start_check = $db->currentStage($id);
 
-if($st_start_check[1] == "stage1"){
+if($st_start_check[1] == "stage7"){
     $stage = $st_start_check;
 } else {
     //start the stage
-    $stage = $db->startStage("stage1", $id);
+    $stage = $db->startStage("stage7", $id);
 }
 
 ?>
 
-<h1>Stage 1 Answer</h1>
+<h1>Stage 7 Answer</h1>
 
-<form action="/api/stage1" method="post">
+<form action="/api/stage7" method="post">
     <label>Answer:</label>
     <input type="text" name="answer">
     <label>User ID:</label>

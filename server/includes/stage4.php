@@ -16,8 +16,14 @@ if(!$id || $stcheck){
     http401();
 }
 
-//start the stage
-$stage = $db->startStage("stage4", $id);
+//check we haven't started the stage before 
+$st_start_check = $db->currentStage($id);
+if($st_start_check[1] == "stage4"){
+    $stage = $st_start_check;
+} else {
+    //start the stage
+    $stage = $db->startStage("stage4", $id);
+}
 
 ?>
 
@@ -29,6 +35,6 @@ $stage = $db->startStage("stage4", $id);
     <label>User ID:</label>
     <input type="text" name="hash" value="<?php echo $_GET['id']; ?>" readonly>
     <label>Stage ID:</label>
-    <input type="text" name="sid" value="<?php echo $stage[1]; ?>" readonly>
+    <input type="text" name="sid" value="<?php echo $stage[2]; ?>" readonly>
     <input type="submit" value="Submit">
 </form>

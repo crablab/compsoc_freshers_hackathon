@@ -35,9 +35,10 @@ echo "ID: " . $hash;
 // //send an email
 sendMail($_POST['email'], "Challenge 1", "
     Thanks for signing up!
+    
     In case you forget your ID is " . $hash . ". 
 
-    You can find instructions for the first challenge here: 
+    You can find instructions for the first challenge here: https://transfer.sh/zgoZ7/question1.pdf
 
     Submit your solution here: compsoc.crablab.co/stage1/?id=" . $hash . "
 

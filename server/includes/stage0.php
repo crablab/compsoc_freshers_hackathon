@@ -8,3 +8,4 @@
     <input type="email" name="email" placeholder="email" id="name">
     <input type="submit" value="Go!">
 </form>
+<small>We'll use your email to send you one email after the event. It will then be permanently deleted and we won't pass it on to any 3rd parties.</small>

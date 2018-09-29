@@ -69,7 +69,7 @@ class database {
         $query->bindParam(":st", $time);
         $query->execute();
 
-        return [true, $id];
+        return [true, $stage, $sid];
     }
 
     public function endStage($sid, $uid, $stage){
@@ -79,7 +79,7 @@ class database {
         }
 
         $time = time();
-        $query = $this->db->prepare("UPDATE `stages` SET `completed` = :cp WHERE `id` = :sid AND `completed` = NULL");
+        $query = $this->db->prepare("UPDATE `stages` SET `completed` = :cp WHERE `id` = :sid AND `completed` IS NULL");
         $query->bindParam(":sid", $sid);
         $query->bindParam(":cp", $time);
         $query->execute();
@@ -88,12 +88,13 @@ class database {
     }
 
     public function currentStage($uid){
-        $query = $this->db->prepare("SELECT * FROM `stages` WHERE `uid` = :uid WHERE `started` IS NOT NULL AND `completed` = NULL");
-        $query->bindParam(":uid", $id);
+        $query = $this->db->prepare("SELECT * FROM `stages` WHERE `uid` = :uid AND `started` IS NOT NULL AND `completed` IS NULL");
+        $query->bindParam(":uid", $uid);
         $query->execute();
 
         if($query->rowCount() == 1){
-            return [true, $query->fetch(PDO::FETCH_ASSOC)['stage']];
+            $stage = $query->fetch(PDO::FETCH_ASSOC);
+            return [true, $stage['stage'], $stage['id']];
         } elseif ($query->rowCount() == 0) {
             return [false, null];
         } else {

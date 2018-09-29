@@ -19,19 +19,31 @@ $leaders = [];
 
 foreach ($users as $key => $value) {
     $user_stages = [];
+    $leaders[$value['id']] = [];
+    $total = 0;
+   
     foreach ($stages as $key1 => $value1) {
         if($value1['uid'] == $value['id']){
-            array_push($user_stages, $value1);
+            //iterating through user stages
+            if(!empty($value1['completed']) && !empty($value1['started'])){
+                $diff = $value1['completed'] - $value1['started'];
+                //part of hour in seconds rounded 
+                $score = round((3600 - $diff)/100);
+
+                if($score < 0){
+                    $score = 0;
+                }
+
+                $leaders[$value['id']][$value1['stage']] = $score;
+                $total = $score + $total; 
+            } else {
+                $leaders[$value['id']][$value1['stage']] = 0;
+            }
         }
     }
 
-    $last = $user_stages[count($user_stages) -1];
+    $leaders[$value['id']]['total'] = $total;
 
-    if(empty($last['completed'])){
-        $last = $user_stages[count($user_stages) -2];
-    }
-
-    array_push($leaders, [$value['hash'], $last['stage']]);
 }
 
 echo json_encode($leaders);

@@ -112,6 +112,12 @@ function loadCMS($sitePageURLArray, $site){
             case 'stage6':
                 require("../server/includes/stage6.php");
                 break;
+            case 'stage7':
+                require("../server/includes/stage7.php");
+                break;
+            case 'stage8':
+                require("../server/includes/stage8.php");
+                break;
             default:
                 http404();
                 break;
