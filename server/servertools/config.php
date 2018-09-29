@@ -19,6 +19,125 @@ class database {
 
         return $this->db;
     }
+
+    public function hashLookup($hash){
+        if(!$this->db){
+            throw new exception("Missing DB instance");
+        }
+
+        $query = $this->db->prepare("SELECT * FROM `users` WHERE `hash` = :hs");
+        $query->bindParam(":hs", $hash);
+        $query->execute();
+
+        if($query->rowCount() != 1){
+            return false; 
+        } else {
+            return $query->fetch(PDO::FETCH_ASSOC)['id'];
+        }
+    }
+
+    public function getEmail($id){
+        $query = $this->db->prepare("SELECT * FROM `users` WHERE `id` = :id");
+        $query->bindParam(":id", $id);
+        $query->execute();
+
+        if($query->rowCount() != 1){
+            return false; 
+        } else {
+            return $query->fetch(PDO::FETCH_ASSOC)['email'];
+        }
+    }
+
+    public function startStage($stage, $id){
+        //check we don't have a stage already 
+        $query = $this->db->prepare("SELECT * FROM `stages` WHERE `uid` = :uid AND `stage` = :stg");
+        $query->bindParam(":uid", $id);
+        $query->bindParam(":stg", $stage);
+        $query->execute();
+
+        if($query->rowCount() != 0){
+            return [false, $query->fetch(PDO::FETCH_ASSOC)['id']];
+        }
+
+        $sid = uniqid();
+        $time = time();
+
+        $query = $this->db->prepare("INSERT INTO `stages` (`id`, `uid`, `stage`, `started`, `completed`) VALUES (:id, :uid, :stg, :st, null)");
+        $query->bindParam(":id", $sid);
+        $query->bindParam(":uid", $id);
+        $query->bindParam(":stg", $stage);
+        $query->bindParam(":st", $time);
+        $query->execute();
+
+        return [true, $id];
+    }
+
+    public function endStage($sid, $uid, $stage){
+        //check we don't have a completedstage already 
+        if($this->stageCompleted($uid, $stage)){
+            return false;
+        }
+
+        $time = time();
+        $query = $this->db->prepare("UPDATE `stages` SET `completed` = :cp WHERE `id` = :sid AND `completed` = NULL");
+        $query->bindParam(":sid", $sid);
+        $query->bindParam(":cp", $time);
+        $query->execute();
+
+        return true;
+    }
+
+    public function currentStage($uid){
+        $query = $this->db->prepare("SELECT * FROM `stages` WHERE `uid` = :uid WHERE `started` IS NOT NULL AND `completed` = NULL");
+        $query->bindParam(":uid", $id);
+        $query->execute();
+
+        if($query->rowCount() == 1){
+            return [true, $query->fetch(PDO::FETCH_ASSOC)['stage']];
+        } elseif ($query->rowCount() == 0) {
+            return [false, null];
+        } else {
+            throw new exception ("In multiple stages");
+        }
+    }
+
+    public function stageCompleted($uid, $stage){
+        $query = $this->db->prepare("SELECT * FROM `stages` WHERE `uid` = :uid AND `stage` = :stg AND `started` IS NOT NULL AND `completed` IS NOT NULL");
+        $query->bindParam(":uid", $id);
+        $query->bindParam(":stg", $stage);
+        $query->execute();
+
+        if($query->rowCount() == 1){
+            return true;
+        } elseif ($query->rowCount() == 0) {
+            return false;
+        } else {
+            throw new exception ("Stage completed multiple times");
+        }
+    }
 }
+
+function sendMail($email, $subject, $body){
+    
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, "https://api.mailgun.net/v3/crablab.co/messages");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+
+    curl_setopt($ch, CURLOPT_USERPWD, "api" . ":" . "key-3fbbb2b52f6f43c78cb8533b0e16c27f");
+
+    curl_setopt($ch, CURLOPT_POSTFIELDS,
+            "from=" . urlencode("compsoc@crablab.co") . "&to=" . urlencode($email) . "&subject=" . urlencode($subject) . "&text=" . urlencode($body));
+
+    $result = curl_exec($ch);
+    if (curl_errno($ch)) {
+        echo 'Error:' . curl_error($ch);
+    }
+
+    var_dump($result);
+    curl_close ($ch);
+}
+
 
 ?>

@@ -18,10 +18,32 @@ $query->bindParam(":ts", $time);
 $query->bindParam(":hs", $hash);
 $query->execute();
 
+$sid = uniqid();
+$stage = "stage0";
+
+$query = $db->prepare("INSERT INTO `stages` (`id`, `uid`, `stage`, `started`, `completed`) VALUES (:id, :uid, :stg, :st, :cp)");
+$query->bindParam(":id", $sid);
+$query->bindParam(":uid", $id);
+$query->bindParam(":stg", $stage);
+$query->bindParam(":st", $time);
+$query->bindParam(":cp", $time);
+$query->execute();
+
+
 echo "ID: " . $hash;
 
-//send an email
+// //send an email
+sendMail($_POST['email'], "Challenge 1", "
+    Thanks for signing up!
+    In case you forget your ID is " . $hash . ". 
 
+    You can find instructions for the first challenge here: 
+
+    Submit your solution here: compsoc.crablab.co/stage1/?id=" . $hash . "
+
+    Good luck!
+    ");
 
 header("Location: /stage1/?id=" . $hash);
+
 ?>
