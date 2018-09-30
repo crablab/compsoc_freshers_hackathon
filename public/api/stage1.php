@@ -22,7 +22,7 @@ if (strtoupper($_POST['answer']) != "1101111") {
 if($db->endStage($_POST['sid'], $id, "stage1")){
     // //send an email
     sendMail($db->getEmail($id), "Challenge 2", "
-        Here's the next challenge: https://transfer.sh/5KGA8/question2.pdf
+        Here's the next challenge: https://transfer.sh/M73dS/question2.pdf
 
         Submit your solution here: compsoc.crablab.co/stage2/?id=" . $_POST['hash'] . "
         ");

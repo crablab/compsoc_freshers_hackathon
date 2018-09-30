@@ -19,7 +19,7 @@ $leaders = [];
 
 foreach ($users as $key => $value) {
     $user_stages = [];
-    $leaders[$value['id']] = [];
+    $leaders[$value['id']] = ["id" => $value['id']];
     $total = 0;
    
     foreach ($stages as $key1 => $value1) {
@@ -45,6 +45,12 @@ foreach ($users as $key => $value) {
     $leaders[$value['id']]['total'] = $total;
 
 }
+
+usort($leaders, function($a, $b) {
+    return $a['total'] <=> $b['total'];
+});
+
+$leaders = array_reverse($leaders);
 
 echo json_encode($leaders);
 
