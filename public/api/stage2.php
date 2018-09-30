@@ -22,7 +22,7 @@ if (strtoupper($_POST['answer']) != "TERMINAL") {
 if($db->endStage($_POST['sid'], $id, "stage2")){
     // //send an email
     sendMail($db->getEmail($id), "Challenge 3", "
-        Here's the next challenge: 
+        Here's the next challenge: https://transfer.sh/P03jR/question3.pdf
 
         Submit your solution here: compsoc.crablab.co/stage3/?id=" . $_POST['hash'] . "
         ");

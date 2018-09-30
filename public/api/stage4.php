@@ -22,7 +22,7 @@ if (strtoupper($_POST['answer']) != "SHAKESPEARE") {
 if($db->endStage($_POST['sid'], $id, "stage4")){
     // //send an email
     sendMail($db->getEmail($id), "Challenge 5", "
-        Here's the next challenge: 
+        Here's the next challenge: https://transfer.sh/nuj8j/question5.pdf
 
         Submit your solution here: compsoc.crablab.co/stage5/?id=" . $_POST['hash'] . "
         ");

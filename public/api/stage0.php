@@ -38,7 +38,7 @@ sendMail($_POST['email'], "Challenge 1", "
     
     In case you forget your ID is " . $hash . ". 
 
-    You can find instructions for the first challenge here: https://transfer.sh/zgoZ7/question1.pdf
+    You can find instructions for the first challenge here: https://transfer.sh/15yoYl/question1.pdf
 
     Submit your solution here: compsoc.crablab.co/stage1/?id=" . $hash . "
 

@@ -22,7 +22,7 @@ if (strtoupper($_POST['answer']) != "DEABC") {
 if($db->endStage($_POST['sid'], $id, "stage3")){
     // //send an email
     sendMail($db->getEmail($id), "Challenge 4", "
-        Here's the next challenge: 
+        Here's the next challenge: https://transfer.sh/15REGO/question4.pdf
 
         Submit your solution here: compsoc.crablab.co/stage4/?id=" . $_POST['hash'] . "
         ");

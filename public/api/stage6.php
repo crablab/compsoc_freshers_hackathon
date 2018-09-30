@@ -22,7 +22,7 @@ if ($_POST['answer'] != md5($_POST['hash'])) {
 if($db->endStage($_POST['sid'], $id, "stage6")){
     // //send an email
     sendMail($db->getEmail($id), "Challenge 7", "
-        Here's the next challenge: 
+        Here's the next challenge: https://transfer.sh/hHzEh/question7.pdf
 
         Submit your solution here: compsoc.crablab.co/stage7/?id=" . $_POST['hash'] . "
         ");
